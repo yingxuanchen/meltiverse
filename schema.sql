@@ -1,6 +1,7 @@
 -- DROP TABLE material_tag;
 -- DROP TABLE tag;
 -- DROP TABLE material;
+-- DROP TABLE nut;
 
 CREATE TABLE nut (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -10,7 +11,7 @@ CREATE TABLE nut (
     contact VARCHAR(255),
     PRIMARY KEY (id),
     UNIQUE (username)
-);
+) DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE material (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -27,7 +28,7 @@ CREATE TABLE material (
 	PRIMARY KEY (id),
     FOREIGN KEY (created_by) REFERENCES nut(id),
     FOREIGN KEY (updated_by) REFERENCES nut(id)
-);
+) DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE tag (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -40,7 +41,7 @@ CREATE TABLE tag (
     PRIMARY KEY (id),
     FOREIGN KEY (created_by) REFERENCES nut(id),
     FOREIGN KEY (updated_by) REFERENCES nut(id)
-);
+) DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE material_tag (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -56,7 +57,9 @@ CREATE TABLE material_tag (
     FOREIGN KEY (tag_id) REFERENCES tag(id),
     FOREIGN KEY (created_by) REFERENCES nut(id),
     FOREIGN KEY (updated_by) REFERENCES nut(id)
-);
+) DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE tag CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- UPDATE tag
 -- SET created_by = 1, updated_by = 1, created_at = CURRENT_TIMESTAMP(), updated_at = CURRENT_TIMESTAMP();
