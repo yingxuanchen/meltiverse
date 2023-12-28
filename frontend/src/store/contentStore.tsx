@@ -34,18 +34,25 @@ const reducer = (state: ContentState, action: Action) => {
   switch (action.type) {
     case "CHANGE_CONTENT":
       if (action.payload.contentType === "VIEW_MATERIAL") {
+        window.history.replaceState(
+          null,
+          "",
+          `/material/${action.payload.materialId ?? state.materialId}`
+        );
         return {
           ...state,
           ...action.payload,
           tagId: null,
         };
       } else if (action.payload.contentType === "VIEW_TAG") {
+        window.history.replaceState(null, "", `/tag/${action.payload.tagId}`);
         return {
           ...state,
           ...action.payload,
           materialId: null,
         };
       } else {
+        window.history.replaceState(null, "", `/`);
         return {
           ...initialState,
         };
