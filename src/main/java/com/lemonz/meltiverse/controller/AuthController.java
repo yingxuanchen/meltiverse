@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "auth")
+@RequestMapping(value = "api/auth")
 public class AuthController {
 
     private final AuthService authService;

@@ -9,7 +9,7 @@ import {
 import "./App.css";
 import HomePage from "./components/HomePage";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { sidebarStore } from "./store/sidebarStore";
 import Login from "./components/AppBar/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -17,17 +17,42 @@ import { snackbarStore } from "./store/snackbarStore";
 import { authStore } from "./store/authStore";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import About from "./components/AppBar/About";
+import { useLocation } from "react-router-dom";
+import { contentStore } from "./store/contentStore";
 
 function App() {
-  const { state, dispatch } = useContext(sidebarStore);
+  const { state: sidebarState, dispatch: dispatchSidebar } =
+    useContext(sidebarStore);
   const [openLoginModal, setOpenLoginModal] = useState<boolean>(false);
   const [openAboutModal, setOpenAboutModal] = useState<boolean>(false);
   const { setSnackbar } = useContext(snackbarStore);
   const { state: authState, dispatch: dispatchAuth } = useContext(authStore);
+  const location = useLocation();
+  const { state, dispatch } = useContext(contentStore);
+
+  useEffect(() => {
+    if (location.pathname.startsWith("/material/")) {
+      const materialId = +location.pathname.split("/")[2];
+      if (!Number.isNaN(materialId)) {
+        dispatch({
+          type: "CHANGE_CONTENT",
+          payload: { contentType: "VIEW_MATERIAL", materialId },
+        });
+      }
+    } else if (location.pathname.startsWith("/tag/")) {
+      const tagId = +location.pathname.split("/")[2];
+      if (!Number.isNaN(tagId)) {
+        dispatch({
+          type: "CHANGE_CONTENT",
+          payload: { contentType: "VIEW_TAG", tagId },
+        });
+      }
+    }
+  }, [location.pathname, dispatch]);
 
   const handleMenuClick = () => {
-    dispatch({
-      type: state.open ? "CLOSE" : "OPEN",
+    dispatchSidebar({
+      type: sidebarState.open ? "CLOSE" : "OPEN",
     });
   };
 

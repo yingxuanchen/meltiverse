@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "material-tag")
+@RequestMapping(value = "api/material-tag")
 public class MaterialTagController {
     private final MaterialTagService materialTagService;
 

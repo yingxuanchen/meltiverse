@@ -51,6 +51,13 @@ const ViewMaterial = (props: Props) => {
       );
       setIsLoading(false);
       if (!response.ok) {
+        if (response.status === 404) {
+          dispatchContent({
+            type: "CHANGE_CONTENT",
+            payload: { contentType: null },
+          });
+          throw new Error("Invalid material id");
+        }
         throw new Error("Failed to fetch material");
       }
       const data = await response.json();
@@ -68,7 +75,7 @@ const ViewMaterial = (props: Props) => {
         open: true,
       });
     }
-  }, [materialId, setSnackbar, dispatchMedia]);
+  }, [materialId, setSnackbar, dispatchMedia, dispatchContent]);
 
   useEffect(() => {
     fetchMaterial();

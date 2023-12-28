@@ -46,16 +46,34 @@ const ViewTagTimestamps = (props: Props) => {
   const fetchTagTimestamps = useCallback(
     async (page: number) => {
       setIsLoading(true);
-      const response = await fetcher(
-        `${process.env.REACT_APP_HOST_URL}/material/${materialId}/tag?page=${page}`
-      );
-      const data = await response.json();
-      setTagTimestamps(data.content);
-      setPage(data.pageable.pageNumber);
-      setTotalCount(data.totalElements);
-      setIsLoading(false);
+      try {
+        const response = await fetcher(
+          `${process.env.REACT_APP_HOST_URL}/material/${materialId}/tag?page=${page}`
+        );
+        setIsLoading(false);
+        if (!response.ok) {
+          if (response.status === 404) {
+            dispatchContent({
+              type: "CHANGE_CONTENT",
+              payload: { contentType: null },
+            });
+            throw new Error("Invalid material id");
+          }
+          throw new Error("Failed to fetch material tags");
+        }
+        const data = await response.json();
+        setTagTimestamps(data.content);
+        setPage(data.pageable.pageNumber);
+        setTotalCount(data.totalElements);
+      } catch (error) {
+        setSnackbar({
+          message: (error as Error).message,
+          severity: "error",
+          open: true,
+        });
+      }
     },
-    [materialId]
+    [materialId, setSnackbar, dispatchContent]
   );
 
   useEffect(() => {
@@ -66,7 +84,11 @@ const ViewTagTimestamps = (props: Props) => {
     fetchTagTimestamps(page);
   };
 
-  const handleAddEdit = (tagTimestamp: TagTimestamp | null) => {
+  const handleAddEdit = (
+    e: React.MouseEvent,
+    tagTimestamp: TagTimestamp | null
+  ) => {
+    e.stopPropagation();
     setSelectedTagTimestamp(tagTimestamp);
     setOpenModal(true);
   };
@@ -134,7 +156,7 @@ const ViewTagTimestamps = (props: Props) => {
             <Button
               size="small"
               variant="contained"
-              onClick={() => handleAddEdit(null)}
+              onClick={(e) => handleAddEdit(e, null)}
               startIcon={<LibraryAddIcon />}
               disabled={!authState.loggedIn}
             >
@@ -181,10 +203,11 @@ const ViewTagTimestamps = (props: Props) => {
                       <TableCell>
                         <IconButton
                           aria-label="edit"
-                          onClick={() => handleAddEdit(t)}
+                          onClick={(e) => handleAddEdit(e, t)}
                           disabled={
                             !authState.loggedIn ||
-                            authState.userId !== t.createdBy
+                            (authState.role !== "admin" &&
+                              authState.userId !== t.createdBy)
                           }
                         >
                           <EditIcon />
@@ -194,7 +217,8 @@ const ViewTagTimestamps = (props: Props) => {
                           onClick={() => handleDelete(t.id)}
                           disabled={
                             !authState.loggedIn ||
-                            authState.userId !== t.createdBy
+                            (authState.role !== "admin" &&
+                              authState.userId !== t.createdBy)
                           }
                         >
                           <DeleteIcon />

@@ -15,8 +15,16 @@ SELECT mt.material_id, m.posted_date, m.author, m.title, m.url, m.topic, GROUP_C
                 )
                 GROUP BY mt.material_id, m.posted_date, m.author, m.title, m.url, m.topic;
 
+SELECT table_schema "sql12671607",
+        ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) "DB Size in MB" 
+FROM information_schema.tables 
+GROUP BY table_schema;
 
-                
+SHOW FULL COLUMNS FROM material;
+
+-- SET wait_timeout = 60;
+-- show global variables like "wait_timeout";
+
 -- UPDATE tag
 -- SET use_count = (
 -- 	SELECT COUNT(id)

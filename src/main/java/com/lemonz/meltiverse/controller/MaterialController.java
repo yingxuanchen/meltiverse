@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "material")
+@RequestMapping(value = "api/material")
 public class MaterialController {
     private final MaterialService materialService;
 
@@ -25,11 +25,7 @@ public class MaterialController {
             @RequestParam(defaultValue = "") String search,
             @PageableDefault(sort = {"postedDate", "id"}, direction = Sort.Direction.DESC, size = 10) Pageable pageable
     ) {
-        long start = System.currentTimeMillis();
-        Page<Material> res = materialService.getMaterials(search, pageable);
-        long end = System.currentTimeMillis() - start;
-        System.out.println("test: " + end);
-        return res;
+        return materialService.getMaterials(search, pageable);
     }
 
     @GetMapping("{id}")
@@ -62,17 +58,5 @@ public class MaterialController {
     @PreAuthorize("hasRole('ADMIN')")
     void deleteMaterial(@PathVariable Long id) {
         materialService.deleteMaterial(id);
-    }
-
-    @GetMapping("test")
-    List<String> test() {
-        long start = System.currentTimeMillis();
-        int res = 0;
-        for (int i = 0; i < 100; i++) {
-            res += i;
-        }
-        long end = System.currentTimeMillis() - start;
-        System.out.println("test: " + end);
-        return Arrays.asList("this", "is", "a", "long", "list", "of", "strings");
     }
 }

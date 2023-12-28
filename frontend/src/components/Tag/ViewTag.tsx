@@ -52,6 +52,10 @@ const ViewTag = (props: Props) => {
       );
       setIsLoading(false);
       if (!tagResponse.ok || !matTimestampsResponse.ok) {
+        dispatchContent({
+          type: "CHANGE_CONTENT",
+          payload: { contentType: null },
+        });
         throw new Error("Failed to fetch tag or timestamps");
       }
       const tagData = await tagResponse.json();
@@ -65,7 +69,7 @@ const ViewTag = (props: Props) => {
         open: true,
       });
     }
-  }, [tagId, setSnackbar]);
+  }, [tagId, setSnackbar, dispatchContent]);
 
   useEffect(() => {
     fetchTag();

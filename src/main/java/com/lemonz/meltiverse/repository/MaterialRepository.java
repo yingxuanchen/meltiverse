@@ -12,10 +12,10 @@ import org.springframework.stereotype.Repository;
 public interface MaterialRepository extends JpaRepository<Material, Long> {
     @Query("""
                 SELECT m FROM Material m
-                WHERE lower(m.author) LIKE lower(concat('%', :search, '%'))
-                OR lower(m.title) LIKE lower(concat('%', :search, '%'))
-                OR lower(m.topic) LIKE lower(concat('%', :search, '%'))
-                OR m.postedDate LIKE concat('%', :search, '%')
+                WHERE (m.author LIKE concat('%', :search, '%')
+                OR m.title LIKE concat('%', :search, '%')
+                OR m.topic LIKE concat('%', :search, '%'))
+                OR DATE_FORMAT(m.postedDate, '%Y-%m-%d') LIKE concat('%', :search, '%')
             """)
     Page<Material> searchByAuthorTitleTopic(@Param("search") String search, Pageable pageable);
 }
