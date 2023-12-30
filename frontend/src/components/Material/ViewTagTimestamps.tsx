@@ -122,9 +122,11 @@ const ViewTagTimestamps = (props: Props) => {
     }
   };
 
-  const handleModalClose = () => {
+  const handleModalClose = (toRefresh: boolean) => {
     setOpenModal(false);
-    fetchTagTimestamps(0);
+    if (toRefresh) {
+      fetchTagTimestamps(0);
+    }
   };
 
   const handleClick = (timestamp: number) => {

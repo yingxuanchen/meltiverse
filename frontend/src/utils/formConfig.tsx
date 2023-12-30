@@ -1,13 +1,8 @@
-import { ChangeEventHandler, Fragment } from "react";
+import { ChangeEventHandler } from "react";
 import Input from "../components/common/Input";
-import {
-  requiredRule,
-  dateFormatRule,
-  timestampFormatRule,
-} from "./inputValidationRules";
-import { Material, TagTimestamp } from "../types/types";
+import { requiredRule, dateFormatRule } from "./inputValidationRules";
+import { Material } from "../types/types";
 import { formatDateString } from "./utils";
-import { Autocomplete, TextField } from "@mui/material";
 
 /**
  * creates and returns object representation of form field
@@ -105,60 +100,3 @@ export const materialForm = (material: Material | null) => {
     },
   };
 };
-
-// // object representation of Material Tag form
-// export const materialTagForm = (tagTimestamp: TagTimestamp | null) => {
-//   return {
-//     tag: {
-//       ...createAutocompleteFieldConfig(
-//         "Tag",
-//         tagTimestamp?.tag ?? null,
-//       ),
-//       validationRules: [
-//         requiredRule("Tag"),
-//       ],
-//     },
-//     timestamp: {
-//       ...createFormFieldConfig(
-//         "Timestamp",
-//         "timestamp",
-//         "text",
-//         tagTimestamp?.timestamp ?? "",
-//         true
-//       ),
-//       validationRules: [timestampFormatRule("Timestamp")],
-//     },
-//   };
-// };
-
-// function createAutocompleteFieldConfig(
-//   label: string,
-//   defaultValue: any,
-// ) {
-//   return {
-//     renderInput: (
-//       handleChange: ChangeEventHandler<HTMLInputElement>,
-//       value: string,
-//       isValid: boolean,
-//       error: string,
-//     ) => {
-//       return (
-//         <Fragment>
-
-//         <Autocomplete
-//             options={tags}
-//             filterOptions={(x) => x}
-//             renderInput={(params) => (
-//               <TextField {...params} label={label} variant="filled" />
-//             )}
-//           />
-//           <div>{error}</div>
-//         </Fragment>
-//       );
-//     },
-//     value: defaultValue,
-//     valid: defaultValue ? true : hasValidationRule ? false : true,
-//     errorMessage: "",
-//     touched: false,
-//   };
-// }

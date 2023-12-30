@@ -111,9 +111,11 @@ const ViewTag = (props: Props) => {
     }
   };
 
-  const handleModalClose = () => {
+  const handleModalClose = (toRefresh: boolean) => {
     setOpenModal(false);
-    fetchTag();
+    if (toRefresh) {
+      fetchTag();
+    }
   };
 
   const handleSelectMaterial = (materialId: number) => {

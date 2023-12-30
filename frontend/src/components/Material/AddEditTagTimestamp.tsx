@@ -23,7 +23,7 @@ import {
 interface Props {
   materialId: number;
   tagTimestamp: TagTimestamp | null;
-  onClose: () => void;
+  onClose: (toRefresh: boolean) => void;
 }
 
 const AddEditTagTimestamp = (props: Props) => {
@@ -95,7 +95,7 @@ const AddEditTagTimestamp = (props: Props) => {
         severity: "success",
         open: true,
       });
-      onClose();
+      onClose(true);
     } catch (error) {
       setSnackbar({
         message: (error as Error).message,
@@ -106,7 +106,12 @@ const AddEditTagTimestamp = (props: Props) => {
   };
 
   return (
-    <Dialog open={true} onClose={onClose} maxWidth="xs" fullWidth={true}>
+    <Dialog
+      open={true}
+      onClose={() => onClose(false)}
+      maxWidth="xs"
+      fullWidth={true}
+    >
       <form onSubmit={handleSave}>
         <DialogTitle>
           {tagTimestamp ? "Edit" : "Add"} Tag for Material
@@ -158,7 +163,7 @@ const AddEditTagTimestamp = (props: Props) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={() => onClose(false)}>Cancel</Button>
           <Button
             type="submit"
             variant="outlined"

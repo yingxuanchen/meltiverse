@@ -12,6 +12,7 @@ import {
   Grid,
   IconButton,
   Button,
+  Link,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { fetcher, formatDateString } from "../../utils/utils";
@@ -89,7 +90,9 @@ const ViewMaterial = (props: Props) => {
 
   const handleModalClose = (materialId?: number | null) => {
     setOpenModal(false);
-    fetchMaterial();
+    if (materialId != null) {
+      fetchMaterial();
+    }
   };
 
   const handleViewMaterial = () => {
@@ -161,7 +164,16 @@ const ViewMaterial = (props: Props) => {
                   </TableRow>
                   <TableRow>
                     <TableCell>Link</TableCell>
-                    <TableCell>{material.url}</TableCell>
+                    <TableCell>
+                      <Link
+                        href={material.url}
+                        underline="hover"
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        {material.url}
+                      </Link>
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Topic</TableCell>

@@ -13,7 +13,7 @@ import { fetcher } from "../../utils/utils";
 
 interface Props {
   tag: Tag | null;
-  onClose: () => void;
+  onClose: (toRefresh: boolean) => void;
 }
 
 const AddEditTag = (props: Props) => {
@@ -52,7 +52,7 @@ const AddEditTag = (props: Props) => {
         severity: "success",
         open: true,
       });
-      onClose();
+      onClose(true);
     } catch (error) {
       setSnackbar({
         message: (error as Error).message,
@@ -64,7 +64,7 @@ const AddEditTag = (props: Props) => {
 
   return (
     <Fragment>
-      <Dialog open={true} onClose={onClose}>
+      <Dialog open={true} onClose={() => onClose(false)}>
         <DialogTitle>{tag ? "Edit" : "Add"} Tag</DialogTitle>
         <DialogContent>
           <TextField
@@ -78,7 +78,7 @@ const AddEditTag = (props: Props) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={() => onClose(false)}>Cancel</Button>
           <Button
             onClick={handleSave}
             variant="outlined"
