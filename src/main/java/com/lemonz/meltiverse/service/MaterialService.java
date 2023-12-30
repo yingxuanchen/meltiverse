@@ -58,8 +58,15 @@ public class MaterialService {
         if (existing == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        material.setId(id);
-        Material saved = materialRepo.save(material);
+
+        existing.setPostedDate(material.getPostedDate());
+        existing.setAuthor(material.getAuthor());
+        existing.setTitle(material.getTitle());
+        existing.setUrl(material.getUrl());
+        existing.setTopic(material.getTopic());
+        existing.setReviewed(material.getReviewed());
+
+        Material saved = materialRepo.save(existing);
         return saved.getId();
     }
 
