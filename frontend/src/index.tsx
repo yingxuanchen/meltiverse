@@ -9,6 +9,7 @@ import { SidebarStateProvider } from "./store/sidebarStore";
 import { MediaStateProvider } from "./store/mediaStore";
 import { BrowserRouter } from "react-router-dom";
 import { AuthStateProvider } from "./store/authStore";
+import { SearchStateProvider } from "./store/searchStore";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,11 +20,13 @@ root.render(
     <AuthStateProvider>
       <SidebarStateProvider>
         <ContentStateProvider>
-          <SnackbarProvider>
-            <MediaStateProvider>
-              <App />
-            </MediaStateProvider>
-          </SnackbarProvider>
+          <SearchStateProvider>
+            <SnackbarProvider>
+              <MediaStateProvider>
+                <App />
+              </MediaStateProvider>
+            </SnackbarProvider>
+          </SearchStateProvider>
         </ContentStateProvider>
       </SidebarStateProvider>
     </AuthStateProvider>

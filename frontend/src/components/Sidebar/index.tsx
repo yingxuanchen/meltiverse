@@ -39,11 +39,11 @@ const Sidebar = () => {
     >
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs centered onChange={handleChangeTab} value={tabIndex}>
-          <Tab label="Materials" />
           <Tab label="Tags" />
+          <Tab label="Materials" />
         </Tabs>
       </Box>
-      {tabIndex === 0 ? <MaterialList /> : <TagList />}
+      {tabIndex === 0 ? <TagList /> : <MaterialList />}
     </Drawer>
   );
 };

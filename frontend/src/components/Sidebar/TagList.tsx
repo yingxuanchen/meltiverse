@@ -29,17 +29,32 @@ import SearchIcon from "@mui/icons-material/Search";
 import useDebounce from "../../hooks/useDebounce";
 import { fetcher } from "../../utils/utils";
 import { authStore } from "../../store/authStore";
+import useFirstRender from "../../hooks/useFirstRender";
+import { searchStore } from "../../store/searchStore";
 
 const TagList = () => {
   const { state, dispatch } = useContext(contentStore);
-  const [tagList, setTagList] = useState<Tag[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(0);
-  const [totalCount, setTotalCount] = useState<number>(0);
-  const [searchInput, setSearchInput] = useState<string>("");
-  const debouncedSearch = useDebounce(searchInput, 800);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { state: authState } = useContext(authStore);
+  const isFirstRender = useFirstRender();
+
+  const { state: searchState, dispatch: dispatchSearch } =
+    useContext(searchStore);
+  const [searchInput, setSearchInput] = useState<string>(
+    searchState.tagInput as string
+  );
+  const debouncedSearch = useDebounce(searchInput, 800);
+
+  const [tagList, setTagList] = useState<Tag[]>(
+    searchState.tagData?.content ?? []
+  );
+  const [page, setPage] = useState<number>(
+    searchState.tagData?.pageable.pageNumber ?? 0
+  );
+  const [totalCount, setTotalCount] = useState<number>(
+    searchState.tagData?.totalElements ?? 0
+  );
 
   const fetchTagList = useCallback(
     async (page: number) => {
@@ -48,17 +63,27 @@ const TagList = () => {
         `${process.env.REACT_APP_HOST_URL}/tag?search=${debouncedSearch}&page=${page}`
       );
       const data = await response.json();
+      dispatchSearch({
+        type: "SEARCH_TAG",
+        payload: {
+          tagInput: debouncedSearch,
+          tagData: data,
+        },
+      });
       setTagList(data.content);
       setPage(data.pageable.pageNumber);
       setTotalCount(data.totalElements);
       setIsLoading(false);
     },
-    [debouncedSearch]
+    [debouncedSearch, dispatchSearch]
   );
 
   useEffect(() => {
-    fetchTagList(0);
-  }, [fetchTagList]);
+    if (!isFirstRender || tagList.length === 0) {
+      fetchTagList(isFirstRender ? page : 0);
+    }
+    // eslint-disable-next-line
+  }, [debouncedSearch]);
 
   const handlePageChange = (_event: any | null, page: number) => {
     fetchTagList(page);

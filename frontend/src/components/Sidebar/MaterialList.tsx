@@ -29,17 +29,32 @@ import AddEditMaterial from "../Material/AddEditMaterial";
 import SearchIcon from "@mui/icons-material/Search";
 import useDebounce from "../../hooks/useDebounce";
 import { authStore } from "../../store/authStore";
+import { searchStore } from "../../store/searchStore";
+import useFirstRender from "../../hooks/useFirstRender";
 
 const MaterialList = () => {
   const { state, dispatch } = useContext(contentStore);
-  const [materialList, setMaterialList] = useState<MaterialSummary[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(0);
-  const [totalCount, setTotalCount] = useState<number>(0);
-  const [searchInput, setSearchInput] = useState<string>("");
-  const debouncedSearch = useDebounce(searchInput, 800);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { state: authState } = useContext(authStore);
+  const isFirstRender = useFirstRender();
+
+  const { state: searchState, dispatch: dispatchSearch } =
+    useContext(searchStore);
+  const [searchInput, setSearchInput] = useState<string>(
+    searchState.materialInput as string
+  );
+  const debouncedSearch = useDebounce(searchInput, 800);
+
+  const [materialList, setMaterialList] = useState<MaterialSummary[]>(
+    searchState.materialData?.content ?? []
+  );
+  const [page, setPage] = useState<number>(
+    searchState.materialData?.pageable.pageNumber ?? 0
+  );
+  const [totalCount, setTotalCount] = useState<number>(
+    searchState.materialData?.totalElements ?? 0
+  );
 
   const fetchMaterialList = useCallback(
     async (page: number) => {
@@ -48,17 +63,27 @@ const MaterialList = () => {
         `${process.env.REACT_APP_HOST_URL}/material?search=${debouncedSearch}&page=${page}`
       );
       const data = await response.json();
+      dispatchSearch({
+        type: "SEARCH_MATERIAL",
+        payload: {
+          materialInput: debouncedSearch,
+          materialData: data,
+        },
+      });
       setMaterialList(data.content);
       setPage(data.pageable.pageNumber);
       setTotalCount(data.totalElements);
       setIsLoading(false);
     },
-    [debouncedSearch]
+    [debouncedSearch, dispatchSearch]
   );
 
   useEffect(() => {
-    fetchMaterialList(0);
-  }, [fetchMaterialList]);
+    if (!isFirstRender || materialList.length === 0) {
+      fetchMaterialList(isFirstRender ? page : 0);
+    }
+    // eslint-disable-next-line
+  }, [debouncedSearch]);
 
   const handlePageChange = (_event: any | null, page: number) => {
     fetchMaterialList(page);
