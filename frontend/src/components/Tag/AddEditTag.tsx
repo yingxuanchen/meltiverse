@@ -10,6 +10,7 @@ import { useState, Fragment, ChangeEvent, useContext } from "react";
 import { Tag } from "../../types/types";
 import { snackbarStore } from "../../store/snackbarStore";
 import { fetcher } from "../../utils/utils";
+import { sidebarStore } from "../../store/sidebarStore";
 
 interface Props {
   tag: Tag | null;
@@ -21,6 +22,7 @@ const AddEditTag = (props: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [labelInput, setLabelInput] = useState<string>(tag?.label ?? "");
   const { setSnackbar } = useContext(snackbarStore);
+  const { dispatch: dispatchSidebar } = useContext(sidebarStore);
 
   const handleLabelInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const trimmed = event.target.value.trim();
@@ -53,7 +55,11 @@ const AddEditTag = (props: Props) => {
         open: true,
       });
       onClose(true);
+      dispatchSidebar({
+        type: "REFRESH",
+      });
     } catch (error) {
+      setIsLoading(false);
       setSnackbar({
         message: (error as Error).message,
         severity: "error",

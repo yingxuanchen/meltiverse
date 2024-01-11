@@ -2,14 +2,16 @@ import React, { createContext, useReducer } from "react";
 
 interface SidebarState {
   open: boolean;
+  toRefresh: boolean;
 }
 
 interface Action {
-  type: "OPEN" | "CLOSE";
+  type: "OPEN" | "CLOSE" | "REFRESH" | "DONE_REFRESH";
 }
 
 const initialState = {
   open: true,
+  toRefresh: false,
 };
 
 const sidebarStore = createContext<{
@@ -30,6 +32,16 @@ const reducer = (state: SidebarState, action: Action) => {
       return {
         ...state,
         open: false,
+      };
+    case "REFRESH":
+      return {
+        ...state,
+        toRefresh: true,
+      };
+    case "DONE_REFRESH":
+      return {
+        ...state,
+        toRefresh: false,
       };
     default:
       throw new Error("wrong reducer action");

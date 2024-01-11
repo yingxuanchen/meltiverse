@@ -66,6 +66,7 @@ const ViewTagTimestamps = (props: Props) => {
         setPage(data.pageable.pageNumber);
         setTotalCount(data.totalElements);
       } catch (error) {
+        setIsLoading(false);
         setSnackbar({
           message: (error as Error).message,
           severity: "error",
@@ -114,6 +115,7 @@ const ViewTagTimestamps = (props: Props) => {
       });
       fetchTagTimestamps(0);
     } catch (error) {
+      setIsLoading(false);
       setSnackbar({
         message: (error as Error).message,
         severity: "error",

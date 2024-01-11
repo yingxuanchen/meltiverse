@@ -24,6 +24,7 @@ import MediaContainer from "../common/MediaContainer";
 import { mediaStore } from "../../store/mediaStore";
 import { contentStore } from "../../store/contentStore";
 import { authStore } from "../../store/authStore";
+import ImageContainer from "../common/ImageContainer";
 
 const TableCell = styled(TableCellO)`
   border: none;
@@ -43,6 +44,7 @@ const ViewMaterial = (props: Props) => {
   const { state: contentState, dispatch: dispatchContent } =
     useContext(contentStore);
   const { state: authState } = useContext(authStore);
+  const [imageName, setImageName] = useState<string>("");
 
   const fetchMaterial = useCallback(async () => {
     setIsLoading(true);
@@ -63,13 +65,19 @@ const ViewMaterial = (props: Props) => {
       }
       const data = await response.json();
       setMaterial(data);
-      dispatchMedia({
-        type: "SET_URL",
-        payload: {
-          url: data.url,
-        },
-      });
+      if (data.imageName != null) {
+        setImageName(data.imageName);
+      } else {
+        setImageName("");
+        dispatchMedia({
+          type: "SET_URL",
+          payload: {
+            url: data.url,
+          },
+        });
+      }
     } catch (error) {
+      setIsLoading(false);
       setSnackbar({
         message: (error as Error).message,
         severity: "error",
@@ -108,7 +116,11 @@ const ViewMaterial = (props: Props) => {
         <AddEditMaterial material={material} onClose={handleModalClose} />
       )}
       <Stack>
-        <MediaContainer />
+        {imageName ? (
+          <ImageContainer imageName={imageName} />
+        ) : (
+          <MediaContainer />
+        )}
         <Grid container columns={3} alignItems="center">
           <Grid item xs={1}>
             {contentState.contentType !== "VIEW_MATERIAL" && (

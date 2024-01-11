@@ -97,6 +97,7 @@ const AddEditTagTimestamp = (props: Props) => {
       });
       onClose(true);
     } catch (error) {
+      setIsLoading(false);
       setSnackbar({
         message: (error as Error).message,
         severity: "error",

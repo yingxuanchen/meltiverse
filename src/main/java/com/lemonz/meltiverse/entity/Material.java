@@ -20,6 +20,7 @@ public class Material extends Auditable {
     private String url;
     private String topic;
     private Boolean reviewed = false;
+    private String imageName;
 
     //    @OneToMany(mappedBy = "material")
 //    private List<MaterialTag> materialTags;

@@ -6,6 +6,7 @@ export interface MaterialSummary {
   url: string;
   topic: string;
   reviewed: boolean;
+  imageName: string;
 }
 
 export interface Material extends MaterialSummary {}

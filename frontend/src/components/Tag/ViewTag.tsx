@@ -63,6 +63,7 @@ const ViewTag = (props: Props) => {
       setTag(tagData);
       setMatTimestamps(matTimestampsData.content);
     } catch (error) {
+      setIsLoading(false);
       setSnackbar({
         message: (error as Error).message,
         severity: "error",
@@ -103,6 +104,7 @@ const ViewTag = (props: Props) => {
         payload: { contentType: null },
       });
     } catch (error) {
+      setIsLoading(false);
       setSnackbar({
         message: (error as Error).message,
         severity: "error",

@@ -20,6 +20,7 @@ CREATE TABLE material (
     title VARCHAR(255) NOT NULL,
     url VARCHAR(255) NOT NULL,
     topic VARCHAR(255),
+    image_name VARCHAR(255),
     reviewed TINYINT DEFAULT 0 NOT NULL,
     created_by INT UNSIGNED NOT NULL,
     created_at TIMESTAMP NOT NULL,
@@ -59,18 +60,15 @@ CREATE TABLE material_tag (
     FOREIGN KEY (updated_by) REFERENCES nut(id)
 ) DEFAULT CHARSET=utf8mb4;
 
-ALTER TABLE tag CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- ALTER TABLE tag CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- UPDATE tag
 -- SET created_by = 1, updated_by = 1, created_at = CURRENT_TIMESTAMP(), updated_at = CURRENT_TIMESTAMP();
 
 -- ALTER TABLE material_tag CHANGE time_seconds time_stamp INT UNSIGNED;
 
--- ALTER TABLE tag
--- ADD COLUMN created_by INT UNSIGNED NOT NULL,
--- ADD COLUMN created_at TIMESTAMP NOT NULL,
--- ADD COLUMN updated_by INT UNSIGNED NOT NULL,
--- ADD COLUMN updated_at TIMESTAMP NOT NULL;
+-- ALTER TABLE material
+-- ADD COLUMN image_name VARCHAR(255);
 
 -- ALTER TABLE material_tag
 -- ADD FOREIGN KEY (updated_by) REFERENCES nut(id);

@@ -25,7 +25,7 @@ const MediaContainer = () => {
   ) : mediaType === MediaType.Ig ? (
     <IgContainer />
   ) : (
-    <h4>Not able to display media</h4>
+    <h4>No media to display</h4>
   );
 };
 

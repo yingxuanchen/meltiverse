@@ -31,12 +31,15 @@ import { fetcher } from "../../utils/utils";
 import { authStore } from "../../store/authStore";
 import useFirstRender from "../../hooks/useFirstRender";
 import { searchStore } from "../../store/searchStore";
+import { sidebarStore } from "../../store/sidebarStore";
 
 const TagList = () => {
   const { state, dispatch } = useContext(contentStore);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { state: authState } = useContext(authStore);
+  const { state: sidebarState, dispatch: dispatchSidebar } =
+    useContext(sidebarStore);
   const isFirstRender = useFirstRender();
 
   const { state: searchState, dispatch: dispatchSearch } =
@@ -79,7 +82,10 @@ const TagList = () => {
   );
 
   useEffect(() => {
-    if (!isFirstRender || tagList.length === 0) {
+    if (sidebarState.toRefresh || !isFirstRender || tagList.length === 0) {
+      dispatchSidebar({
+        type: "DONE_REFRESH",
+      });
       fetchTagList(isFirstRender ? page : 0);
     }
     // eslint-disable-next-line
@@ -120,11 +126,16 @@ const TagList = () => {
             Tag
           </Button>
         </Grid>
-        <Grid item xs={4} textAlign="start">
+        <Grid
+          item
+          xs={4}
+          textAlign="start"
+          sx={{ paddingLeft: 1, paddingRight: 1 }}
+        >
           <TextField
             size="small"
             variant="standard"
-            label="Search Tag"
+            label="Search"
             value={searchInput}
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
               setSearchInput(event.target.value);
