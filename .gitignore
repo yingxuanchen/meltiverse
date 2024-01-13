@@ -32,6 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 
-
 ### db data ###
 dump/
+
+src/main/resources/superb-app-408307-7b639f8a0863.json
