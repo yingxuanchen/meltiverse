@@ -106,9 +106,11 @@ const TagList = () => {
     setOpenModal(true);
   };
 
-  const handleModalClose = () => {
+  const handleModalClose = (toRefresh: boolean) => {
     setOpenModal(false);
-    fetchTagList(0);
+    if (toRefresh) {
+      fetchTagList(0);
+    }
   };
 
   return (
