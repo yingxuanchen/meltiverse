@@ -34,7 +34,7 @@ const reducer = (state: ContentState, action: Action) => {
   switch (action.type) {
     case "CHANGE_CONTENT":
       if (action.payload.contentType === "VIEW_MATERIAL") {
-        window.history.replaceState(
+        window.history.pushState(
           null,
           "",
           `/material/${action.payload.materialId ?? state.materialId}`
@@ -45,14 +45,14 @@ const reducer = (state: ContentState, action: Action) => {
           tagId: null,
         };
       } else if (action.payload.contentType === "VIEW_TAG") {
-        window.history.replaceState(null, "", `/tag/${action.payload.tagId}`);
+        window.history.pushState(null, "", `/tag/${action.payload.tagId}`);
         return {
           ...state,
           ...action.payload,
           materialId: null,
         };
       } else {
-        window.history.replaceState(null, "", `/`);
+        window.history.pushState(null, "", `/`);
         return {
           ...initialState,
         };
