@@ -12,6 +12,7 @@ import {
   Button,
   CircularProgress,
   Grid,
+  IconButton,
   InputAdornment,
   Paper,
   Table,
@@ -32,6 +33,7 @@ import { authStore } from "../../store/authStore";
 import useFirstRender from "../../hooks/useFirstRender";
 import { searchStore } from "../../store/searchStore";
 import { sidebarStore } from "../../store/sidebarStore";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const TagList = () => {
   const { state, dispatch } = useContext(contentStore);
@@ -95,6 +97,10 @@ const TagList = () => {
     fetchTagList(page);
   };
 
+  const handleClearSearch = () => {
+    setSearchInput("");
+  };
+
   const handleSelectTag = (tagId: number) => {
     dispatch({
       type: "CHANGE_CONTENT",
@@ -143,9 +149,16 @@ const TagList = () => {
               setSearchInput(event.target.value);
             }}
             InputProps={{
-              endAdornment: (
+              startAdornment: (
                 <InputAdornment position="start">
                   <SearchIcon />
+                </InputAdornment>
+              ),
+              endAdornment: searchInput && (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClearSearch}>
+                    <CancelIcon fontSize="small" />
+                  </IconButton>
                 </InputAdornment>
               ),
             }}

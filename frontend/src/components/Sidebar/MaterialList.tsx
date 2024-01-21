@@ -2,6 +2,7 @@ import {
   Button,
   CircularProgress,
   Grid,
+  IconButton,
   InputAdornment,
   Paper,
   Table,
@@ -32,6 +33,7 @@ import { authStore } from "../../store/authStore";
 import { searchStore } from "../../store/searchStore";
 import useFirstRender from "../../hooks/useFirstRender";
 import { sidebarStore } from "../../store/sidebarStore";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const MaterialList = () => {
   const { state, dispatch } = useContext(contentStore);
@@ -95,6 +97,10 @@ const MaterialList = () => {
     fetchMaterialList(page);
   };
 
+  const handleClearSearch = () => {
+    setSearchInput("");
+  };
+
   const handleSelectMaterial = (materialId: number) => {
     dispatch({
       type: "CHANGE_CONTENT",
@@ -148,9 +154,16 @@ const MaterialList = () => {
               setSearchInput(event.target.value);
             }}
             InputProps={{
-              endAdornment: (
+              startAdornment: (
                 <InputAdornment position="start">
                   <SearchIcon />
+                </InputAdornment>
+              ),
+              endAdornment: searchInput && (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClearSearch}>
+                    <CancelIcon fontSize="small" />
+                  </IconButton>
                 </InputAdornment>
               ),
             }}
