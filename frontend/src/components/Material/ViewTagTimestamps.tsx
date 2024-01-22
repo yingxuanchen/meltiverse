@@ -202,7 +202,9 @@ const ViewTagTimestamps = (props: Props) => {
                         </div>
                       </TableCell>
                       <TableCell>
-                        {getTimestampFromSeconds(t.timestamp)}
+                        {t.timestamp
+                          ? getTimestampFromSeconds(t.timestamp)
+                          : "-"}
                       </TableCell>
                       <TableCell>
                         <IconButton
