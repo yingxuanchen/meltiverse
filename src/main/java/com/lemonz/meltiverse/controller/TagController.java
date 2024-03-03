@@ -20,7 +20,7 @@ public class TagController {
     @GetMapping
     Page<Tag> getTags(
             @RequestParam(defaultValue = "") String search,
-            @PageableDefault(sort = {"useCount", "id"}, direction = Sort.Direction.DESC, size = 10) Pageable pageable
+            @PageableDefault(sort = {"updatedAt", "id"}, direction = Sort.Direction.DESC, size = 10) Pageable pageable
     ) {
         return tagService.getTags(search, pageable);
     }
