@@ -45,7 +45,7 @@ export function timestampFormatRule(inputName: string) {
   return createValidationRule(
     "timestampFormat",
     `${inputName} should only contain digits and :`,
-    (inputValue: string) => inputValue === "" || /^[0-9:]+$/.test(inputValue)
+    (inputValue: string) => inputValue === "" || /^[0-9:：]+$/.test(inputValue)
   );
 }
 

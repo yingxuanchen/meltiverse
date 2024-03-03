@@ -12,7 +12,7 @@ export function getYoutubeVideoId(url: string): string {
 }
 
 export function getSecondsFromTimestamp(timestamp: string): number {
-  const sections = timestamp.split(":");
+  const sections = timestamp.split(/:|：/);
   let seconds = 0;
   for (let i = 0; i < sections.length; i++) {
     seconds *= 60;
